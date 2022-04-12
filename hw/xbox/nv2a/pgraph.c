@@ -219,6 +219,7 @@ typedef struct ColorFormatInfo {
     GLenum gl_format;
     GLenum gl_type;
     GLenum gl_swizzle_mask[4];
+    bool depth;
 } ColorFormatInfo;
 
 static const ColorFormatInfo kelvin_color_format_map[66] = {
@@ -300,14 +301,33 @@ static const ColorFormatInfo kelvin_color_format_map[66] = {
         {2, true, GL_RGBA8,  GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV},
     [NV097_SET_TEXTURE_FORMAT_COLOR_LC_IMAGE_YB8CR8YA8CB8] =
         {2, true, GL_RGBA8,  GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV},
-    [NV097_SET_TEXTURE_FORMAT_COLOR_LU_IMAGE_DEPTH_X8_Y24_FIXED] =
-        {4, true, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8},
+
+    // Depth textures get special treatment in the pixel shader. Ideally it
+    // would be possible to use GL_DEPTH_COMPONENT, but that would require
+    // undoing the viewport transform on depth reference values so they can be
+    // normalized back to the [0,1] interval supported by GL depth maps. In some
+    // games this is extremely challenging as the clip range is changed between
+    // the creation of the depth map and its application.
+    //
+    // These simulated depth maps need to pass the depth value in the red
+    // component and a flag indicating whether they are 32 or 16 bit in the
+    // green component (to allow the stencil bits to be discarded).
     [NV097_SET_TEXTURE_FORMAT_COLOR_SZ_DEPTH_Y16_FIXED] =
-        {2, false, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT},
+        {2, false, GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_SHORT,
+         {GL_RED, GL_ZERO, GL_ZERO, GL_ZERO}, true},
+    [NV097_SET_TEXTURE_FORMAT_COLOR_LU_IMAGE_DEPTH_X8_Y24_FIXED] =
+        {4, true, GL_R32UI, GL_RED_INTEGER, GL_UNSIGNED_INT,
+         {GL_RED, GL_ONE, GL_ZERO, GL_ZERO}, true},
     [NV097_SET_TEXTURE_FORMAT_COLOR_LU_IMAGE_DEPTH_Y16_FIXED] =
-        {2, true, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT},
+        {2, true, GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_SHORT,
+         {GL_RED, GL_ZERO, GL_ZERO, GL_ZERO}, true},
+    // FIXME: Implement support for float mode.
+    // Ideally the actual float value (which should be screenspace depth) needs
+    // to be preserved without remapping to the [0,1] interval in the same way
+    // that the fixed depth formats are implemented.
     [NV097_SET_TEXTURE_FORMAT_COLOR_LU_IMAGE_DEPTH_Y16_FLOAT] =
         {2, true, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_FLOAT},
+
     [NV097_SET_TEXTURE_FORMAT_COLOR_LU_IMAGE_Y16] =
         {2, true, GL_R16, GL_RED, GL_UNSIGNED_SHORT,
          {GL_RED, GL_RED, GL_RED, GL_ONE}},
@@ -357,7 +377,6 @@ static const SurfaceFormatInfo kelvin_surface_zeta_int_format_map[] = {
     [NV097_SET_SURFACE_FORMAT_ZETA_Z24S8] =
         {4, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT},
 };
-
 
 // static void pgraph_set_context_user(NV2AState *d, uint32_t val);
 static void pgraph_gl_fence(void);
@@ -3528,6 +3547,11 @@ DEF_METHOD(NV097, SET_SHADOW_ZSLOPE_THRESHOLD)
     assert(parameter == 0x7F800000); /* FIXME: Unimplemented */
 }
 
+DEF_METHOD(NV097, SET_SHADOW_COMPARE_FUNC)
+{
+    pg->shadow_compare_func = parameter;
+}
+
 DEF_METHOD(NV097, SET_SHADER_STAGE_PROGRAM)
 {
     pg->regs[NV_PGRAPH_SHADERPROG] = parameter;
@@ -3828,6 +3852,7 @@ void pgraph_init(NV2AState *d)
 
     pg->shader_cache = g_hash_table_new(shader_hash, shader_equal);
 
+    pg->shadow_compare_func = SHADOW_COMPARE_FUNC_NEVER;
     pg->material_alpha = 0.0f;
 
     for (i=0; i<NV2A_VERTEXSHADER_ATTRIBUTES; i++) {
@@ -4224,6 +4249,8 @@ static void pgraph_bind_shaders(PGRAPHState *pg)
     state.psh.point_sprite = pg->regs[NV_PGRAPH_SETUPRASTER] &
                                  NV_PGRAPH_SETUPRASTER_POINTSMOOTHENABLE;
 
+    state.psh.shadow_compare_func = pg->shadow_compare_func;
+
     state.fixed_function = fixed_function;
 
     /* fixed function stuff */
@@ -4366,6 +4393,8 @@ static void pgraph_bind_shaders(PGRAPHState *pg)
          */
         state.psh.snorm_tex[i] = (f.gl_internal_format == GL_RGB8_SNORM)
                                  || (f.gl_internal_format == GL_RG8_SNORM);
+
+        state.psh.shadow_map[i] = f.depth;
 
         uint32_t filter = pg->regs[NV_PGRAPH_TEXFILTER0 + i*4];
         unsigned int min_filter = GET_MASK(filter, NV_PGRAPH_TEXFILTER0_MIN);

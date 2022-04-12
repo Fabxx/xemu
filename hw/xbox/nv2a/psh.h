@@ -33,6 +33,17 @@ enum PshAlphaFunc {
     ALPHA_FUNC_ALWAYS,
 };
 
+enum PshShadowCompareFunc {
+    SHADOW_COMPARE_FUNC_NEVER,
+    SHADOW_COMPARE_FUNC_GREATER,
+    SHADOW_COMPARE_FUNC_EQUAL,
+    SHADOW_COMPARE_FUNC_GEQUAL,
+    SHADOW_COMPARE_FUNC_LESS,
+    SHADOW_COMPARE_FUNC_NOTEQUAL,
+    SHADOW_COMPARE_FUNC_LEQUAL,
+    SHADOW_COMPARE_FUNC_ALWAYS,
+};
+
 enum ConvolutionFilter {
     CONVOLUTION_FILTER_DISABLED,
     CONVOLUTION_FILTER_QUINCUNX,
@@ -56,6 +67,9 @@ typedef struct PshState {
     bool compare_mode[4][4];
     bool alphakill[4];
     enum ConvolutionFilter conv_tex[4];
+
+    bool shadow_map[4];
+    enum PshShadowCompareFunc shadow_compare_func;
 
     bool alpha_test;
     enum PshAlphaFunc alpha_func;
