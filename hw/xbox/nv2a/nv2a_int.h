@@ -116,7 +116,6 @@ typedef struct Surface {
     bool buffer_dirty;
     bool write_enabled_cache;
     unsigned int pitch;
-    
     hwaddr offset;
 } Surface;
 
