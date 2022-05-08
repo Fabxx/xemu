@@ -24,7 +24,7 @@
 #include "s3tc.h"
 #include "ui/xemu-settings.h"
 #include "qemu/fast-hash.h"
-#include "SDL.h"
+#include "pgraph_texture_replacer.h"
 
 
 #define DBG_SURFACES 0
@@ -396,7 +396,6 @@ static bool pgraph_zeta_write_enabled(PGRAPHState *pg);
 static void pgraph_set_surface_dirty(PGRAPHState *pg, bool color, bool zeta);
 static void pgraph_wait_for_surface_download(SurfaceBinding *e);
 static void pgraph_surface_access_callback(void *opaque, MemoryRegion *mr, hwaddr addr, hwaddr len, bool write);
-void texture(TextureBinding *texture, SurfaceBinding *surface);
 static SurfaceBinding *pgraph_surface_put(NV2AState *d, hwaddr addr, SurfaceBinding *e);
 static SurfaceBinding *pgraph_surface_get(NV2AState *d, hwaddr addr);
 static SurfaceBinding *pgraph_surface_get_within(NV2AState *d, hwaddr addr);
@@ -5195,17 +5194,6 @@ static void pgraph_surface_access_callback(
     }
 }
 
-void texture(TextureBinding *texture, SurfaceBinding *surface)
-{
-    printf("EXPORTING\n");
-    if(SDL_SCANCODE_C)
-    {
-        printf("EXPORTING\n");
-        texture_download(texture, surface);
-    }
-    
-}
-
 static SurfaceBinding *pgraph_surface_put(NV2AState *d,
     hwaddr addr,
     SurfaceBinding *surface_in)
@@ -5568,6 +5556,8 @@ static void surface_copy_expand(uint8_t *out, uint8_t *in, unsigned int width,
     }
 }
 
+
+
 static void pgraph_upload_surface_data(NV2AState *d, SurfaceBinding *surface,
                                        bool force)
 {
@@ -5644,16 +5634,15 @@ static void pgraph_upload_surface_data(NV2AState *d, SurfaceBinding *surface,
     glTexImage2D(GL_TEXTURE_2D, 0, surface->fmt.gl_internal_format, width,
                  height, 0, surface->fmt.gl_format, surface->fmt.gl_type,
                  gl_read_buf);
-                surface->texture = gl_read_buf;
     g_free(flipped_buf);
     if (surface->swizzle) {
         g_free(buf);
     }
 
-    // Rebind previous framebuffer binding
+       // Rebind previous framebuffer binding
     glBindTexture(GL_TEXTURE_2D, last_texture_binding);
 
-    pgraph_bind_current_surface(d);
+    pgraph_bind_current_surface(d);  
 }
 
 static void pgraph_compare_surfaces(SurfaceBinding *s1, SurfaceBinding *s2)
