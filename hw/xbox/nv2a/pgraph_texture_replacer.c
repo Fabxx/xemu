@@ -7,13 +7,14 @@ void texture_download(TextureBinding *texture, SurfaceBinding *surface)
 
     snprintf(filename, sizeof(filename), "%lu.bmp", surface->vram_addr);
    
+   //TODO: Check for other texture formats: ARGB BRGA Ecc FRMO PGRAPH CODE nv097 cases and convert with SDL.
     SDL_Surface * surf = SDL_CreateRGBSurfaceFrom(surface->texture, surface->width, surface->height, 8*4, surface->width*4, 0,0,0,0);
     SDL_SaveBMP(surf, filename);
     SDL_FreeSurface(surf);
     free(surface->texture);
 
     surface->texture = NULL;
-    
+
     
 }
 
