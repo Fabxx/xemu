@@ -11,6 +11,9 @@ void texture_download(TextureBinding *texture, SurfaceBinding *surface)
     SDL_SaveBMP(surf, filename);
     SDL_FreeSurface(surf);
     free(surface->texture);
+
+    surface->texture = NULL;
+    
     
 }
 
