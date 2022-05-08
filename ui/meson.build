@@ -23,7 +23,6 @@ xemu_ss.add(files(
   'xemu-monitor.c',
   'xemu-net.c',
   'xemu-settings.cc',
-  'pgraph_texture_replacer.cc',
 
   'xemu.c',
   'xemu-data.c',

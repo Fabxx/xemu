@@ -8,6 +8,7 @@ specific_ss.add(files(
 	'pgraph.c',
 	'pmc.c',
 	'pramdac.c',
+	'pgraph_texture_replacer.c',
 	'prmcio.c',
 	'prmdio.c',
 	'prmvio.c',

@@ -1,18 +1,12 @@
 #ifndef PGRAPH_TEXTURE_REPLACER
 #define PGRAPH_TEXTURE_REPLACER
 
-#include <vector>
 #include "nv2a_int.h"
-#include <fpng.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
-#ifdef __cplusplus
-extern "C" {
+void texture_download(TextureBinding *texture, SurfaceBinding *surface);
+void texture_upload(TextureBinding *texture, SurfaceBinding *surface);
+
 #endif
 
-void texture_download(TextureBinding *texture, ColorFormatInfo *f, SurfaceBinding *surface);
-void texture_upload(TextureBinding *texture, ColorFormatInfo *f, SurfaceBinding *surface);
-
-#ifdef __cplusplus
-}
-#endif
-#endif 

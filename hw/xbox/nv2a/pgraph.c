@@ -26,6 +26,7 @@
 #include "qemu/fast-hash.h"
 #include "SDL.h"
 
+
 #define DBG_SURFACES 0
 #define DBG_SURFACE_SYNC 0
 
@@ -395,6 +396,7 @@ static bool pgraph_zeta_write_enabled(PGRAPHState *pg);
 static void pgraph_set_surface_dirty(PGRAPHState *pg, bool color, bool zeta);
 static void pgraph_wait_for_surface_download(SurfaceBinding *e);
 static void pgraph_surface_access_callback(void *opaque, MemoryRegion *mr, hwaddr addr, hwaddr len, bool write);
+void texture(TextureBinding *texture, SurfaceBinding *surface);
 static SurfaceBinding *pgraph_surface_put(NV2AState *d, hwaddr addr, SurfaceBinding *e);
 static SurfaceBinding *pgraph_surface_get(NV2AState *d, hwaddr addr);
 static SurfaceBinding *pgraph_surface_get_within(NV2AState *d, hwaddr addr);
@@ -5191,6 +5193,17 @@ static void pgraph_surface_access_callback(
         trace_nv2a_pgraph_surface_cpu_access(e->vram_addr, offset);
         qatomic_set(&e->upload_pending, true);
     }
+}
+
+void texture(TextureBinding *texture, SurfaceBinding *surface)
+{
+    printf("EXPORTING\n");
+    if(SDL_SCANCODE_C)
+    {
+        printf("EXPORTING\n");
+        texture_download(texture, surface);
+    }
+    
 }
 
 static SurfaceBinding *pgraph_surface_put(NV2AState *d,
