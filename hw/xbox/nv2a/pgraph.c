@@ -5638,7 +5638,7 @@ static void pgraph_upload_surface_data(NV2AState *d, SurfaceBinding *surface,
     if (surface->swizzle) {
         g_free(buf);
     }
-        surface->texture = gl_read_buf;
+
 
        // Rebind previous framebuffer binding
     glBindTexture(GL_TEXTURE_2D, last_texture_binding);

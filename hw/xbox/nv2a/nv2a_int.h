@@ -155,7 +155,6 @@ typedef struct SurfaceBinding {
     bool draw_dirty;
     bool download_pending;
     bool upload_pending;
-    uint8_t *texture; //used to store texture from gl_buf in upload surface.
 } SurfaceBinding;
 
 typedef struct TextureShape {
