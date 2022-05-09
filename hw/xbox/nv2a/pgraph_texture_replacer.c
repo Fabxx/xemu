@@ -5,7 +5,7 @@
 void texture_download(SurfaceBinding *surface)
 {
     SDL_Surface * surf;
-    char filename[20];
+    char filename[13];
 
         snprintf(filename, sizeof(filename), "%lu.bmp", surface->vram_addr);
 
