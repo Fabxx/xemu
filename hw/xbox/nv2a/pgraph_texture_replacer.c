@@ -1,6 +1,6 @@
 #include "pgraph_texture_replacer.h"
 
-//TODO: Check for other texture formats: ARGB BRGA Ecc FRMO PGRAPH CODE nv097 cases and convert with SDL.
+//TODO: Use a more generic function instead of RGBSUrface, (glreadpixels/GLGetteximage?)
 void texture_download(TextureBinding *texture, SurfaceBinding *surface)
 {
     SDL_surface * surf;
