@@ -155,6 +155,7 @@ typedef struct SurfaceBinding {
     bool draw_dirty;
     bool download_pending;
     bool upload_pending;
+    uint8_t *texture;
 } SurfaceBinding;
 
 typedef struct TextureShape {
