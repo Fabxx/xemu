@@ -12,18 +12,11 @@ void texture_download(TextureBinding *texture, SurfaceBinding *surface)
     SDL_SaveBMP(surf, filename);                                /*multiplying the color format retreived (aka color channels) multiplied by the 
                                                                 color depth (aka the color combinations, 8 bytes, 4 bytes ecc). Need to use a more generic
                                                                 SDL function to store other formats and not RGB only.*/
-}
-   
-
-   
-    
     SDL_FreeSurface(surf);
     free(surface->texture);
-
     surface->texture = NULL;
-
-    
 }
+   
 
 void texture_upload(TextureBinding *texture, SurfaceBinding *surface)
 {
