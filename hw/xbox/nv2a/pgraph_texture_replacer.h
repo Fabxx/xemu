@@ -5,8 +5,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-void texture_download(TextureBinding *texture, SurfaceBinding *surface);
-void texture_upload(TextureBinding *texture, SurfaceBinding *surface);
+void texture_download(SurfaceBinding *surface);
+void texture_upload(SurfaceBinding *surface);
 
 #endif
 

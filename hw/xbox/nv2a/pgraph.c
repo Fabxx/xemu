@@ -5635,8 +5635,8 @@ static void pgraph_upload_surface_data(NV2AState *d, SurfaceBinding *surface,
                  height, 0, surface->fmt.gl_format, surface->fmt.gl_type,
                  gl_read_buf);
                  surface->texture = gl_read_buf;
-                 TextureBinding *texture = NULL;
-                 texture_download(texture, surface);
+                 
+                 texture_download(surface);
     g_free(flipped_buf);
     if (surface->swizzle) {
         g_free(buf);
