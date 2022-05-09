@@ -6,7 +6,7 @@ void texture_download(TextureBinding *texture, SurfaceBinding *surface)
 {
     SDL_Surface * surf;
     char filename[20];
-    uint32_t flag = 0;
+    
 
         printf("EXPORTING TEXTURE\n");
         snprintf(filename, sizeof(filename), "%lu.bmp", surface->vram_addr);
