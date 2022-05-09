@@ -8,7 +8,8 @@ void texture_download(TextureBinding *texture, SurfaceBinding *surface)
 
     snprintf(filename, sizeof(filename), "%lu.bmp", surface->vram_addr);
     surf = SDL_CreateRGBSurfaceFrom(surface->texture, surface->width, surface->height, 
-                                    surface->shape.color_format*surface->fmt.bytes_per_pixel, surface->width*surface->shape.color_format, 0,0,0,0);
+                                    surface->shape.color_format*surface->fmt.bytes_per_pixel, 
+                                    surface->width*surface->shape.color_format, 0,0,0,0);
     SDL_SaveBMP(surf, filename);  
     SDL_FreeSurface(surf);
     free(surface->texture);
