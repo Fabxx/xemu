@@ -1,24 +1,23 @@
 #include "pgraph_texture_replacer.h"
 
-//TODO: use glreadpixels to obtain textures form framebuffer and find another method to save them
+//TODO: export raw data from glreadpixels. Current error: GL_GETERROR == GL_NOERROR ASSERT in pgraph.c:995
 //SDL does not support DXT and other compressed texture types.
-void texture_download(SurfaceBinding *surface)
+void texture_download(NV2AState *d, SurfaceBinding *surface)
 {
-    SDL_Surface * surf;
-    char filename[13];
+     char filename[13];
+     PGRAPHState *pg = &d->pgraph;
+     FILE *texture;
 
     snprintf(filename, sizeof(filename), "%lu.bmp", surface->vram_addr);
-    surf = SDL_CreateRGBSurfaceFrom(surface->texture, surface->width, surface->height, surface->fmt.bytes_per_pixel, surface->pitch, 0,0,0,0);
-    
-    if (surf == NULL) { 
-        fprintf(stderr, SDL_GetError());
-        printf("\nFormat:%d\n", surface->shape.color_format);
-        return;
-    }
-        SDL_SaveBMP(surf, filename);  
-        SDL_FreeSurface(surf);
+
+    glReadPixels(pg->surface_shape.clip_x, pg->surface_shape.clip_y, pg->surface_shape.clip_width, pg->surface_shape.clip_height, 
+                surface->fmt.gl_format, surface->fmt.gl_type, surface->texture);
+    texture = fopen(filename, "w");
+    fwrite(surface->texture, surface->width * surface->height * surface->fmt.bytes_per_pixel, 1, texture);
+    fclose(texture);
+     
         surface->texture = NULL;
-        printf("[EXPORT][%x]%s\n", surface->shape.color_format, surface_check(surface));
+        printf("[EXPORT][TEXTURE][%x]%s.\n", surface->shape.color_format, surface_check(surface));
 }          
 
 void texture_upload(SurfaceBinding *surface)
