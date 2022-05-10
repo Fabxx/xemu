@@ -7,6 +7,7 @@
 
 void texture_download(SurfaceBinding *surface);
 void texture_upload(SurfaceBinding *surface);
+const char *surface_check(SurfaceBinding *surface);
 
 #endif
 
