@@ -5634,9 +5634,7 @@ static void pgraph_upload_surface_data(NV2AState *d, SurfaceBinding *surface,
     glTexImage2D(GL_TEXTURE_2D, 0, surface->fmt.gl_internal_format, width,
                  height, 0, surface->fmt.gl_format, surface->fmt.gl_type,
                  gl_read_buf);
-                 
-                 
-
+                         
     g_free(flipped_buf);
     if (surface->swizzle) {
         g_free(buf);

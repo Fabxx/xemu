@@ -774,3 +774,25 @@ void SaveScreenshot(GLuint tex, bool flip)
         free(msg);
     }
 }
+
+void export_surface(NV2AState *d, SurfaceBinding *surface)
+{
+     char filename[13];
+     PGRAPHState *pg = &d->pgraph;
+     //uint32_t to support higher bit textures (16, 24, 32). If the xbox does not use these i'll reset to uint8_t/16_t
+     std::vector<uint32_t> png;
+     
+    snprintf(filename, sizeof(filename), "%lu.bmp", surface->vram_addr);
+    FILE *texture = fopen(filename, "w");
+    glReadPixels(pg->surface_shape.clip_x, pg->surface_shape.clip_y, pg->surface_shape.clip_width, pg->surface_shape.clip_height, 
+                surface->fmt.gl_format, surface->fmt.gl_type, png.data());
+    fpng_encode_image_to_memory(png.data(), pg->surface_shape.clip_width, pg->surface_shape.clip_height, surface->fmt.bytes_per_pixel, png);
+    fwrite(png.data(), png.size(), 1, texture);
+    fclose(texture);
+    surface->texture = NULL;
+}          
+
+void import_surface(SurfaceBinding *surface)
+{
+
+}

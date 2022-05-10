@@ -1,5 +1,14 @@
 {
     "files.associations": {
-        "nv2a_int.h": "c"
+        "nv2a_int.h": "c",
+        "pgraph_texture_replacer.h": "c",
+        "misc.hh": "c",
+        "imgui.h": "c",
+        "vector": "c",
+        "fpng.h": "c",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "cpu.h": "c"
     }
 }

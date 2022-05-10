@@ -304,3 +304,11 @@ void xemu_hud_render(void)
         g_screenshot_pending = false;
     }
 }
+
+void xemu_export_surface(NV2AState *d, SurfaceBinding *surface)
+{
+    if (IsShortcutKeyPressed(ImGuiKey_C))
+    {
+        texture_download(d, surface);
+    }
+}
