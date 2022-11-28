@@ -353,6 +353,22 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
     if (kbd[sdl_kbd_scancode_map[24]]) state->axis[CONTROLLER_AXIS_RTRIG] = 32767;
 }
 
+void xemu_input_rebind(ControllerState *state)
+{
+    //TODO: Get keymaps from g_config.input class, make an array of those enum states to make a iterated mapping
+    //Remap each keyboard button to the correspondenting controller button. Starting from A which is 0.
+    int events[15];
+    SDL_KeyboardEvent *event;
+    uint8_t *kbd = SDL_GetKeyboardState(NULL);
+
+    //kbd[sdl_kbd_scancode_map[events[0]]] = g_config.input.keyboard_controller_scancode_map.a;
+
+    for (int i = 0; i < 15; i++) {
+    SDL_PollEvent(&event[events[i]]);
+    state->buttons |= kbd[sdl_kbd_scancode_map[events[i]]] << i;
+    }
+}  
+
 void xemu_input_update_sdl_controller_state(ControllerState *state)
 {
     state->buttons = 0;

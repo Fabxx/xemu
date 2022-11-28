@@ -264,10 +264,13 @@ void MainMenuInputView::Draw()
            &g_config.input.background_input_capture,
            "Capture even if window is unfocused (requires restart)");
 
-    if (ImGui::Button("rebind input"))
+    if (ImGui::Button("rebind input")) //verify !&g_config.input.auto_bind
     {
-    }
+         ControllerState state;
+         xemu_input_rebind(&state);
+    }  
 }
+
 
 void MainMenuDisplayView::Draw()
 {

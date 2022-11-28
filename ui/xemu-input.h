@@ -107,6 +107,7 @@ void xemu_input_update_controller(ControllerState *state);
 void xemu_input_update_sdl_kbd_controller_state(ControllerState *state);
 void xemu_input_update_sdl_controller_state(ControllerState *state);
 void xemu_input_update_rumble(ControllerState *state);
+void xemu_input_rebind(ControllerState *state);
 ControllerState *xemu_input_get_bound(int index);
 void xemu_input_bind(int index, ControllerState *state, int save);
 int xemu_input_get_controller_default_bind_port(ControllerState *state, int start);
