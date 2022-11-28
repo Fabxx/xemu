@@ -263,6 +263,10 @@ void MainMenuInputView::Draw()
     Toggle("Background controller input capture",
            &g_config.input.background_input_capture,
            "Capture even if window is unfocused (requires restart)");
+
+    if (ImGui::Button("rebind input"))
+    {
+    }
 }
 
 void MainMenuDisplayView::Draw()
