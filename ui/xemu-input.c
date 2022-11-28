@@ -355,7 +355,7 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
 
 void xemu_input_rebind(ControllerState *state)
 {
-    //TODO: Get keymaps from g_config.input class, make an array of those enum states to make a iterated mapping
+    //!SDL2 Gl refresh function crash while grabbing key event, need to figure out why.
     //Remap each keyboard button to the correspondenting controller button. Starting from A which is 0.
     int events[15];
     SDL_KeyboardEvent *event;
