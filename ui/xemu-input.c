@@ -355,17 +355,21 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
 
 void xemu_input_rebind(ControllerState *state)
 {
-    //!SDL2 Gl refresh function crash while grabbing key event, need to figure out why.
     //Remap each keyboard button to the correspondenting controller button. Starting from A which is 0.
-    int events[15];
-    SDL_KeyboardEvent *event;
-    uint8_t *kbd = SDL_GetKeyboardState(NULL);
+    SDL_Event event[25];
+    int current_event = 0;
 
-    //kbd[sdl_kbd_scancode_map[events[0]]] = g_config.input.keyboard_controller_scancode_map.a;
+    for (size_t i = 0; i < 25; i++)
+    {
+        SDL_PollEvent(&event[i]);
+        //!Need to assign int type to SDL_event.
+        sdl_kbd_scancode_map[i] = g_config.input.keyboard_controller_scancode_map.event[i];
 
-    for (int i = 0; i < 15; i++) {
-    SDL_PollEvent(&event[events[i]]);
-    state->buttons |= kbd[sdl_kbd_scancode_map[events[i]]] << i;
+        if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) ||
+            (sdl_kbd_scancode_map[i] >= SDL_NUM_SCANCODES) ) {
+            fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[i]);
+            sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
+        }
     }
 }  
 
