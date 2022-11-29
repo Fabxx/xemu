@@ -355,22 +355,17 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
 
 void xemu_input_rebind(ControllerState *state, SDL_Event *ev)
 {
-    Uint8 *kbd = SDL_GetKeyboardState(NULL);
-
     for (size_t i = 0; i < 1; i++)
     {
-        kbd[sdl_kbd_scancode_map[i]] = ev->key.keysym.scancode;        
+        sdl_kbd_scancode_map[i] = ev->key.keysym.scancode;        
 
-        if( (kbd[sdl_kbd_scancode_map[i]] < SDL_SCANCODE_UNKNOWN) || 
-            (kbd[sdl_kbd_scancode_map[i]] >= SDL_NUM_SCANCODES) ) {
+        if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) || 
+            (sdl_kbd_scancode_map[i] >= SDL_NUM_SCANCODES) ) {
             fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[i]);
-            kbd[sdl_kbd_scancode_map[i]] = SDL_SCANCODE_UNKNOWN;
+            sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
         }
-    }
-    //this highlights the x button ??
-    kbd[sdl_kbd_scancode_map[0]] = g_config.input.keyboard_controller_scancode_map.a;
-}  
-
+    } 
+}
 void xemu_input_update_sdl_controller_state(ControllerState *state)
 {
     state->buttons = 0;
