@@ -356,10 +356,10 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
 void xemu_input_rebind(ControllerState *state)
 {
     //Remap each keyboard button to the correspondenting controller button. Starting from A which is 0.
-    SDL_Event event[25];
+    SDL_Event event[15];
     int current_event = 0;
 
-    for (size_t i = 0; i < 25; i++)
+    for (size_t i = 0; i < 15; i++)
     {
         SDL_PollEvent(&event[i]);
         //!Need to assign int type to SDL_event.
