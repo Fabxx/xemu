@@ -268,7 +268,8 @@ void MainMenuInputView::Draw()
     if (ImGui::Button("rebind input"))  //!&g_config.input.auto_bind
     {
          ControllerState state;
-         xemu_input_rebind(&state);
+         SDL_Event ev;
+         xemu_input_rebind(&state, &ev);
     }  
 }
 
