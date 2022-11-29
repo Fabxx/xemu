@@ -92,6 +92,8 @@ typedef struct ControllerState {
     void *device; // DeviceState opaque
 } ControllerState;
 
+struct sdl2_console *get_scon_from_window(uint32_t window_id);
+
 typedef QTAILQ_HEAD(, ControllerState) ControllerStateList;
 extern ControllerStateList available_controllers;
 extern ControllerState *bound_controllers[4];

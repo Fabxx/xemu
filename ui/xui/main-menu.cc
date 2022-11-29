@@ -263,15 +263,14 @@ void MainMenuInputView::Draw()
     Toggle("Background controller input capture",
            &g_config.input.background_input_capture,
            "Capture even if window is unfocused (requires restart)");
-    
-    //before remapping, check if auto mapping is off.
-    if (ImGui::Button("rebind input"))  //!&g_config.input.auto_bind
+
+    if (ImGui::IsItemClicked(ImGui::Button("Rebind Controls")))
     {
-         ControllerState state;
-         SDL_Event ev;
-         xemu_input_rebind(&state, &ev);
-    }  
-}
+        ControllerState state;
+        SDL_Event event;
+        xemu_input_rebind(&state, &event);
+    }
+}  
 
 
 void MainMenuDisplayView::Draw()
