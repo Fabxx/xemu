@@ -265,7 +265,7 @@ void MainMenuInputView::Draw()
            "Capture even if window is unfocused (requires restart)");
     
     //before remapping, check if auto mapping is off.
-    if (ImGui::Button("rebind input") && !&g_config.input.auto_bind)  
+    if (ImGui::Button("rebind input"))  //!&g_config.input.auto_bind
     {
          ControllerState state;
          xemu_input_rebind(&state);
