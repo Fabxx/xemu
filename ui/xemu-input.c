@@ -357,7 +357,7 @@ void xemu_input_rebind(ControllerState *state, SDL_Event *ev)
 {
     Uint8 *kbd = SDL_GetKeyboardState(NULL);
 
-    for (size_t i = 0; i < 15; i++)
+    for (size_t i = 0; i < 1; i++)
     {
         kbd[sdl_kbd_scancode_map[i]] = ev->key.keysym.scancode;        
 
@@ -367,6 +367,8 @@ void xemu_input_rebind(ControllerState *state, SDL_Event *ev)
             kbd[sdl_kbd_scancode_map[i]] = SDL_SCANCODE_UNKNOWN;
         }
     }
+    //this highlights the x button ??
+    kbd[sdl_kbd_scancode_map[0]] = g_config.input.keyboard_controller_scancode_map.a;
 }  
 
 void xemu_input_update_sdl_controller_state(ControllerState *state)
