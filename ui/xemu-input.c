@@ -365,7 +365,7 @@ void xemu_input_rebind(ControllerState *state)
         //!Need to assign int type to SDL_event.
         sdl_kbd_scancode_map[i] = g_config.input.keyboard_controller_scancode_map.event[i];
 
-        if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) ||
+        if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) || 
             (sdl_kbd_scancode_map[i] >= SDL_NUM_SCANCODES) ) {
             fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[i]);
             sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
