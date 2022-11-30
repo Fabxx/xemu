@@ -298,7 +298,9 @@ void xemu_input_process_sdl_events(const SDL_Event *event)
         }
     } else if (event->type == SDL_CONTROLLERDEVICEREMAPPED) {
         DPRINTF("Controller Remapped: %d\n", event->cdevice.which);
-    }
+    } else if (is_remapping_active){
+        xemu_input_rebind(event);
+    }  
 }
 
 void xemu_input_update_controller(ControllerState *state)
@@ -355,17 +357,15 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
 
 void xemu_input_rebind(SDL_Event *ev)
 {
-    const uint8_t *kbd = SDL_GetKeyboardState(NULL);
+    if(ev->type == SDL_KEYDOWN){
+        sdl_kbd_scancode_map[0] = ev->key.keysym.scancode;
+        fprintf(stdout, "%d\n", ev->key.keysym.scancode);
+        is_remapping_active = !is_remapping_active;
+    }
     //kbd[SDL_SCANCODE_0];
 
     //TODO: give an order to map buttons by highlighting them on the UI
-    for (size_t i = 0; i < 2; i++)
-    {
-        if (SDL_KEYDOWN == ev->type)
-        {
-            sdl_kbd_scancode_map[i] = kbd[SDL_SCANCODE_0];
-        }
-    }    
+    
     /*
     sdl_kbd_scancode_map[0] = g_config.input.keyboard_controller_scancode_map.b;
     sdl_kbd_scancode_map[2] = g_config.input.keyboard_controller_scancode_map.x;
