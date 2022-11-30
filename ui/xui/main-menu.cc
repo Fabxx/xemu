@@ -273,7 +273,8 @@ void MainMenuInputView::Draw()
     if (is_remapping_active)
     {
         ImGui::Text("Press the key you want to bind to the highlighted button");
-        xemu_input_rebind();
+        SDL_Event event;
+        xemu_input_rebind(&event);
     }
 }
 

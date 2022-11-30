@@ -2,6 +2,14 @@
     "files.associations": {
         "random": "c",
         "console.h": "c",
-        "xemu-input.h": "c"
+        "xemu-input.h": "c",
+        "array": "c",
+        "compare": "c",
+        "functional": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "variant": "c"
     }
 }

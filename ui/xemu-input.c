@@ -363,7 +363,7 @@ void xemu_input_rebind(SDL_Event *ev)
     {
         if (SDL_KEYDOWN == ev->type)
         {
-            sdl_kbd_scancode_map[i] = kbd[];
+            sdl_kbd_scancode_map[i] = kbd[SDL_SCANCODE_0];
         }
     }    
     /*
