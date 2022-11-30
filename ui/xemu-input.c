@@ -355,7 +355,7 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
     if (kbd[sdl_kbd_scancode_map[24]]) state->axis[CONTROLLER_AXIS_RTRIG] = 32767;
 }
 
-void xemu_input_rebind(SDL_Event *ev)
+void xemu_input_rebind(const SDL_Event *ev)
 {
     //TODO: give an order to map buttons by highlighting them on the UI
     if(ev->type == SDL_KEYDOWN){
@@ -367,10 +367,10 @@ void xemu_input_rebind(SDL_Event *ev)
         }
     }
 
-    if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) || 
-        (sdl_kbd_scancode_map[i] >= SDL_NUM_SCANCODES) ) {
-        fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[i]);
-        sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
+    if( (sdl_kbd_scancode_map[currently_remapping] < SDL_SCANCODE_UNKNOWN) || 
+        (sdl_kbd_scancode_map[currently_remapping] >= SDL_NUM_SCANCODES) ) {
+        fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[currently_remapping]);
+        sdl_kbd_scancode_map[currently_remapping] = SDL_SCANCODE_UNKNOWN;
     }
 } 
 
