@@ -353,14 +353,19 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
     if (kbd[sdl_kbd_scancode_map[24]]) state->axis[CONTROLLER_AXIS_RTRIG] = 32767;
 }
 
-void xemu_input_rebind(void)
+void xemu_input_rebind(SDL_Event *ev)
 {
-    //TODO Grab input from keyboard event
-    int key = 0;
+    const uint8_t *kbd = SDL_GetKeyboardState(NULL);
+    //kbd[SDL_SCANCODE_0];
 
- 
-    sdl_kbd_scancode_map[key] = g_config.input.keyboard_controller_scancode_map.a;
-    
+    //TODO: give an order to map buttons by highlighting them on the UI
+    for (size_t i = 0; i < 2; i++)
+    {
+        if (SDL_KEYDOWN == ev->type)
+        {
+            sdl_kbd_scancode_map[i] = kbd[];
+        }
+    }    
     /*
     sdl_kbd_scancode_map[0] = g_config.input.keyboard_controller_scancode_map.b;
     sdl_kbd_scancode_map[2] = g_config.input.keyboard_controller_scancode_map.x;
@@ -398,8 +403,6 @@ void xemu_input_rebind(void)
             sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
         }
     }
-
-    free(ev);    
 } 
 
 void xemu_input_update_sdl_controller_state(ControllerState *state)
