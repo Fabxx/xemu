@@ -360,7 +360,6 @@ void xemu_input_rebind(const SDL_Event *ev)
     //TODO: give an order to map buttons by highlighting them on the UI
     if(ev->type == SDL_KEYDOWN){
         sdl_kbd_scancode_map[currently_remapping] = ev->key.keysym.scancode;
-        fprintf(stdout, "%d\n", ev->key.keysym.scancode);
         currently_remapping++;
         if(currently_remapping == sizeof(sdl_kbd_scancode_map)/sizeof(int)){
             is_remapping_active = false;
