@@ -99,6 +99,7 @@ extern ControllerStateList available_controllers;
 extern ControllerState *bound_controllers[4];
 
 extern bool is_remapping_active;
+extern int currently_remapping;
 
 #ifdef __cplusplus
 extern "C" {

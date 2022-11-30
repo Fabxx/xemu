@@ -357,51 +357,20 @@ void xemu_input_update_sdl_kbd_controller_state(ControllerState *state)
 
 void xemu_input_rebind(SDL_Event *ev)
 {
-    if(ev->type == SDL_KEYDOWN){
-        sdl_kbd_scancode_map[0] = ev->key.keysym.scancode;
-        fprintf(stdout, "%d\n", ev->key.keysym.scancode);
-        is_remapping_active = !is_remapping_active;
-    }
-    //kbd[SDL_SCANCODE_0];
-
     //TODO: give an order to map buttons by highlighting them on the UI
-    
-    /*
-    sdl_kbd_scancode_map[0] = g_config.input.keyboard_controller_scancode_map.b;
-    sdl_kbd_scancode_map[2] = g_config.input.keyboard_controller_scancode_map.x;
-    sdl_kbd_scancode_map[3] = g_config.input.keyboard_controller_scancode_map.y;
-    sdl_kbd_scancode_map[4] = g_config.input.keyboard_controller_scancode_map.dpad_left;
-    sdl_kbd_scancode_map[5] = g_config.input.keyboard_controller_scancode_map.dpad_up;
-    sdl_kbd_scancode_map[6] = g_config.input.keyboard_controller_scancode_map.dpad_right;
-    sdl_kbd_scancode_map[7] = g_config.input.keyboard_controller_scancode_map.dpad_down;
-    sdl_kbd_scancode_map[8] = g_config.input.keyboard_controller_scancode_map.back;
-    sdl_kbd_scancode_map[9] = g_config.input.keyboard_controller_scancode_map.start;
-    sdl_kbd_scancode_map[10] = g_config.input.keyboard_controller_scancode_map.white;
-    sdl_kbd_scancode_map[11] = g_config.input.keyboard_controller_scancode_map.black;
-    sdl_kbd_scancode_map[12] = g_config.input.keyboard_controller_scancode_map.lstick_btn;
-    sdl_kbd_scancode_map[13] = g_config.input.keyboard_controller_scancode_map.rstick_btn;
-    sdl_kbd_scancode_map[14] = g_config.input.keyboard_controller_scancode_map.guide;
-    sdl_kbd_scancode_map[15] = g_config.input.keyboard_controller_scancode_map.lstick_up;
-    sdl_kbd_scancode_map[16] = g_config.input.keyboard_controller_scancode_map.lstick_left;
-    sdl_kbd_scancode_map[17] = g_config.input.keyboard_controller_scancode_map.lstick_right;
-    sdl_kbd_scancode_map[18] = g_config.input.keyboard_controller_scancode_map.lstick_down;
-    sdl_kbd_scancode_map[19] = g_config.input.keyboard_controller_scancode_map.ltrigger;
-    sdl_kbd_scancode_map[20] = g_config.input.keyboard_controller_scancode_map.rstick_up;
-    sdl_kbd_scancode_map[21] = g_config.input.keyboard_controller_scancode_map.rstick_left;
-    sdl_kbd_scancode_map[22] = g_config.input.keyboard_controller_scancode_map.rstick_right;
-    sdl_kbd_scancode_map[23] = g_config.input.keyboard_controller_scancode_map.rstick_down;
-    sdl_kbd_scancode_map[24] = g_config.input.keyboard_controller_scancode_map.rtrigger;
-
-    */
-       
-
-    for (size_t i = 0; i < 1; i++)
-    {
-        if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) || 
-            (sdl_kbd_scancode_map[i] >= SDL_NUM_SCANCODES) ) {
-            fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[i]);
-            sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
+    if(ev->type == SDL_KEYDOWN){
+        sdl_kbd_scancode_map[currently_remapping] = ev->key.keysym.scancode;
+        fprintf(stdout, "%d\n", ev->key.keysym.scancode);
+        currently_remapping++;
+        if(currently_remapping == sizeof(sdl_kbd_scancode_map)/sizeof(int)){
+            is_remapping_active = false;
         }
+    }
+
+    if( (sdl_kbd_scancode_map[i] < SDL_SCANCODE_UNKNOWN) || 
+        (sdl_kbd_scancode_map[i] >= SDL_NUM_SCANCODES) ) {
+        fprintf(stderr, "WARNING: Keyboard controller map scancode out of range (%d) : Disabled\n", sdl_kbd_scancode_map[i]);
+        sdl_kbd_scancode_map[i] = SDL_SCANCODE_UNKNOWN;
     }
 } 
 

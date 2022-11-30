@@ -39,6 +39,7 @@
 
 MainMenuScene g_main_menu;
 bool is_remapping_active = false;
+int currently_remapping = 0;
 
 MainMenuTabView::~MainMenuTabView() {}
 void MainMenuTabView::Draw() {}
@@ -267,6 +268,7 @@ void MainMenuInputView::Draw()
     
     if (ImGui::IsItemClicked(ImGui::Button("Rebind Controls")))
     {
+        currently_remapping = 0;
         is_remapping_active = !is_remapping_active;
     }
 
